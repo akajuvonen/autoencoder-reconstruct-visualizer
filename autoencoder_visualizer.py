@@ -1,4 +1,5 @@
 import tensorflow as tf
+import os
 
 
 def autoencoder(x, output_size, outer_size=500, inner_size=100):
@@ -15,6 +16,10 @@ def main(unused_argv):
     input_size = 28*28
     batch_size = 100
     steps = 1000
+
+    fig_dir = 'figures'
+    if not os.path.exists(fig_dir):
+        os.makedirs(fig_dir)
 
     x = tf.placeholder(tf.float32, [None, input_size], name='input')
 
