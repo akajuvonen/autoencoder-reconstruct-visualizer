@@ -1,5 +1,7 @@
 import tensorflow as tf
 import os
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def autoencoder(x, output_size, outer_size=500, inner_size=100):
@@ -12,10 +14,11 @@ def autoencoder(x, output_size, outer_size=500, inner_size=100):
 
 def main(unused_argv):
     mnist = tf.contrib.learn.datasets.load_dataset('mnist')
+    example_fig = [mnist.train.images[10]]
     learning_rate = 0.001
     input_size = 28*28
     batch_size = 100
-    steps = 1000
+    steps = 500
 
     fig_dir = 'figures'
     if not os.path.exists(fig_dir):
@@ -34,8 +37,16 @@ def main(unused_argv):
         for i in range(1, steps+1):
             batch, _ = mnist.train.next_batch(batch_size)
             _, l = sess.run([train_op, loss], feed_dict={x: batch})
-            if i%100 == 0:
+            if i%20 == 0:
                 print('Training loss at step {0}: {1}'.format(i, l))
+                result = sess.run([output], feed_dict={x: example_fig})
+                reshaped = np.reshape(result, (28, 28))
+                fig = plt.figure(frameon=False)
+                plt.axis('off')
+                plt.imshow(reshaped, cmap='gray')
+                plt.title('Step {}'.format(i))
+                save_path = os.path.join(fig_dir, 'fig_step_{}'.format(i))
+                fig.savefig(save_path, bbox_inches='tight', pad_inches=0)
 
 
 if __name__ == '__main__':
