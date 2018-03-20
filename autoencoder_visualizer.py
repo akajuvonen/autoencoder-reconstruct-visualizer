@@ -18,11 +18,13 @@ def main(unused_argv):
     learning_rate = 0.001
     input_size = 28*28
     batch_size = 100
-    steps = 500
+    steps = 200
+    save_every = 10
 
     fig_dir = 'figures'
     if not os.path.exists(fig_dir):
         os.makedirs(fig_dir)
+    fig = plt.figure(frameon=False)
 
     x = tf.placeholder(tf.float32, [None, input_size], name='input')
 
@@ -37,11 +39,11 @@ def main(unused_argv):
         for i in range(1, steps+1):
             batch, _ = mnist.train.next_batch(batch_size)
             _, l = sess.run([train_op, loss], feed_dict={x: batch})
-            if i%20 == 0:
+            if i % save_every == 0:
                 print('Training loss at step {0}: {1}'.format(i, l))
                 result = sess.run([output], feed_dict={x: example_fig})
                 reshaped = np.reshape(result, (28, 28))
-                fig = plt.figure(frameon=False)
+                plt.clf()
                 plt.axis('off')
                 plt.imshow(reshaped, cmap='gray')
                 plt.title('Step {}'.format(i))
