@@ -47,7 +47,7 @@ def main(unused_argv):
                 plt.axis('off')
                 plt.imshow(reshaped, cmap='gray')
                 plt.title('Step {}'.format(i))
-                save_path = os.path.join(fig_dir, 'fig_step_{}'.format(i))
+                save_path = os.path.join(fig_dir, 'fig_step_{:06d}'.format(i))
                 fig.savefig(save_path, bbox_inches='tight', pad_inches=0)
 
 
