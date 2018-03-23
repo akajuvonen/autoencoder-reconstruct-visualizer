@@ -33,14 +33,22 @@ def main(unused_argv):
     loss = tf.losses.mean_squared_error(x, output)
     train_op = tf.train.AdamOptimizer(learning_rate).minimize(loss)
 
+
     with tf.Session() as sess:
         init = tf.global_variables_initializer()
         sess.run(init)
+        writer = tf.summary.FileWriter('logdir', sess.graph)
+        train_summary = tf.summary.scalar('train_loss', loss)
+
         for i in range(1, steps+1):
             batch, _ = mnist.train.next_batch(batch_size)
-            _, l = sess.run([train_op, loss], feed_dict={x: batch})
+            _, l, ts = sess.run([train_op, loss, train_summary],
+                                feed_dict={x: batch})
+
             if i % save_every == 0:
                 print('Training loss at step {0}: {1}'.format(i, l))
+                writer.add_summary(ts, i)
+
                 result = sess.run([output], feed_dict={x: example_fig})
                 reshaped = np.reshape(result, (28, 28))
                 plt.clf()
