@@ -4,6 +4,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
+def save_figure(image, number, fig, fig_dir):
+    plt.clf()
+    plt.axis('off')
+    plt.imshow(image, cmap='gray')
+    plt.title('Step {}'.format(number))
+    save_path = os.path.join(fig_dir, 'fig_step_{:06d}'.format(number))
+    fig.savefig(save_path, bbox_inches='tight', pad_inches=0)
+
+
 def autoencoder(x, output_size, outer_size=500, inner_size=100):
     encoder = tf.layers.dense(x, outer_size)
     code = tf.layers.dense(encoder, inner_size)
@@ -51,12 +60,7 @@ def main(unused_argv):
 
                 result = sess.run([output], feed_dict={x: example_fig})
                 reshaped = np.reshape(result, (28, 28))
-                plt.clf()
-                plt.axis('off')
-                plt.imshow(reshaped, cmap='gray')
-                plt.title('Step {}'.format(i))
-                save_path = os.path.join(fig_dir, 'fig_step_{:06d}'.format(i))
-                fig.savefig(save_path, bbox_inches='tight', pad_inches=0)
+                save_figure(reshaped, i, fig, fig_dir)
 
 
 if __name__ == '__main__':
