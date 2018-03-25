@@ -52,9 +52,9 @@ def main(unused_argv):
     input_size = 28*28
     batch_size = 100
     # Total number of steps
-    steps = 200
+    steps = 2000
     # Save training loss and image every [save_every] steps
-    save_every = 10
+    save_every = 100
 
     # Create figure directory if doesn't exist
     fig_dir = 'figures'
@@ -90,6 +90,11 @@ def main(unused_argv):
                 # Reshape flat vector into an array
                 reshaped = np.reshape(result, (28, 28))
                 save_figure(reshaped, i, fig, fig_dir)
+
+        # Use the whole test data for calculating final test loss
+        test_data = mnist.test.images
+        _, test_loss = sess.run([output, loss], feed_dict={x: test_data})
+        print('Final test loss: {}'.format(test_loss))
 
 
 if __name__ == '__main__':
