@@ -4,4 +4,7 @@ init:
 gif:
 	convert -delay 50 figures/*.png animation.gif
 
+run:
+	python autoencoder_visualizer.py
+
 .PHONY: init gif
