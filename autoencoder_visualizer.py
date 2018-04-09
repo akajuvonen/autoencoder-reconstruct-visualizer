@@ -22,7 +22,8 @@ def save_figure(image, number, fig, fig_dir):
     fig.savefig(save_path, bbox_inches='tight', pad_inches=0)
 
 
-def autoencoder(x, output_size, outer_size=500, inner_size=100):
+def autoencoder(x, output_size, outer_size=500, inner_size=100,
+                name='autoencoder'):
     """Defines TensorFlow autoencoder model.
 
     Arguments:
@@ -34,11 +35,12 @@ def autoencoder(x, output_size, outer_size=500, inner_size=100):
     Returns:
     output -- Model outputs
     """
-    encoder = tf.layers.dense(x, outer_size)
-    code = tf.layers.dense(encoder, inner_size)
-    decoder = tf.layers.dense(code, outer_size)
-    output = tf.layers.dense(decoder, output_size)
-    return output
+    with tf.variable_scope(name):
+        encoder = tf.layers.dense(x, outer_size, name='encoder')
+        code = tf.layers.dense(encoder, inner_size, name='code')
+        decoder = tf.layers.dense(code, outer_size, name='decoder')
+        output = tf.layers.dense(decoder, output_size, name='output')
+        return output
 
 
 def main(unused_argv):
