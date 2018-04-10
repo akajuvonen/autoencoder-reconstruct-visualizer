@@ -6,8 +6,8 @@ using MNIST hand-written digit dataset as an example.
 ## Dependencies
 
 - TensorFlow
-  - Currently only versions 1.6 or lower work because
-    `tf.contrib.learn.datasets` is deprecated
+  - Tested with TF 1.7, however, `tf.contrib.learn.datasets` is deprecated
+    and will be removed in a future version
   - Not included in `requirements.txt` because there are multiple versions
     available (cpu and gpu), install manually
 - Numpy
